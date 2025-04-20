@@ -63,14 +63,27 @@ export default function HomePage() {
         return problems.map((problem) => (
             <div key={problem._id} className="border rounded-xl p-4 shadow-sm bg-white dark:bg-gray-900">
                 <h3 className="text-xl font-semibold">{problem.title}</h3>
-                <p className="text-sm text-muted-foreground mb-2">{problem.description.slice(0, 100)}...</p>
-                <div className="flex items-center gap-2 text-sm flex-wrap">
-                    <Badge variant="outline">{problem.difficulty}</Badge>
-                    {problem.tags.map((tag, i) => (
-                        <Badge key={i} variant="secondary">
-                            {tag}
-                        </Badge>
-                    ))}
+                <p className="text-sm text-muted-foreground mb-2 line-clamp-1">{problem.description}</p>
+                <div className="flex items-center gap-2 text-sm flex-wrap justify-between">
+                    <div className="flex gap-2 flex-wrap">
+                        {problem.tags.map((tag, i) => (
+                            <Badge key={i} variant="secondary">
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
+                    <div
+                        className={`
+                            px-2 py-1 rounded-md text-white text-xs font-bold uppercase ${
+                                problem.difficulty.toLowerCase() == "easy"
+                                    ? "bg-green-500/80 "
+                                    : problem.difficulty.toLowerCase() == "medium"
+                                    ? "bg-yellow-500/80"
+                                    : "bg-red-500/80"
+                            }`}
+                    >
+                        {problem.difficulty}
+                    </div>
                 </div>
             </div>
         ));
