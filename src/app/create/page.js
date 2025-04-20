@@ -10,7 +10,7 @@ export default function CreateProblem() {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +35,7 @@ function CreateProblemForm({ ...props }) {
             title: "",
             description: "",
             difficulty: "Easy",
-            tags: [],
+            tags: "",
         },
     });
     const { formState } = form;
@@ -60,7 +60,7 @@ function CreateProblemForm({ ...props }) {
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className={cn(
-                    "space-y-6 bg-background p-6 rounded-lg shadow-lg w-full max-w-md mx-auto",
+                    "space-y-8 bg-background p-6 rounded-lg shadow-lg w-full max-w-md mx-auto",
                     props.className
                 )}
                 {...props}
@@ -73,7 +73,10 @@ function CreateProblemForm({ ...props }) {
                     name="title"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Title</FormLabel>
+                            <FormLabel>
+                                Title
+                                <span className="text-destructive">{" * "}</span>
+                            </FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>
@@ -87,7 +90,10 @@ function CreateProblemForm({ ...props }) {
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Description</FormLabel>
+                            <FormLabel>
+                                Description
+                                <span className="text-destructive">{" * "}</span>
+                            </FormLabel>
                             <FormControl>
                                 <Textarea {...field} rows={6} />
                             </FormControl>
@@ -101,9 +107,12 @@ function CreateProblemForm({ ...props }) {
                     name="difficulty"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Difficulty</FormLabel>
+                            <FormLabel>
+                                Difficulty
+                                <span className="text-destructive">{" * "}</span>
+                            </FormLabel>
                             <FormControl>
-                                <Select {...field}>
+                                <Select defaultValue={field.value} onValueChange={field.onChange}>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select a difficulty" />
                                     </SelectTrigger>
@@ -125,11 +134,10 @@ function CreateProblemForm({ ...props }) {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>
-                                Tags{" "}
-                                <span className="text-xs text-muted-foreground">
-                                    comma separated example: tag1, tag2
-                                </span>
+                                Tags
+                                <span className="text-destructive">{" * "}</span>
                             </FormLabel>
+                            <FormDescription>comma separated tags Ex: javascript, python</FormDescription>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>
