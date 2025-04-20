@@ -55,8 +55,7 @@ export default function Navbar({ children }) {
                     </Link>
                 </div>
             </div>
-
-            <main className="p-4 max-w-4xl mx-auto">{children}</main>
+            {children}
         </>
     );
 }
