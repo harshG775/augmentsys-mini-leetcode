@@ -2,7 +2,10 @@
 
 export default function CreateProblem() {
     return (
-        <section className="flex justify-center items-center min-h-screen bg-background p-4">
+        <section className="flex justify-center gap-4 flex-wrap items-center min-h-screen bg-background p-8 px-2 ">
+            <div>
+                <Image src="images\undraw_creative-flow_t3kz.svg" alt="logo" width={300} height={300} />
+            </div>
             <CreateProblemForm />
         </section>
     );
@@ -18,9 +21,9 @@ import { cn } from "@/lib/utils";
 import { Loader } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -77,18 +80,18 @@ function CreateProblemForm({ ...props }) {
                 )}
                 {...props}
             >
-                <h2 className="text-2xl font-semibold">Submit a Problem</h2>
+                <h2 className="text-2xl font-semibold">Create a Problem</h2>
                 <FormField
                     control={form.control}
                     name="title"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>
-                                Title
+                                Problem Title
                                 <span className="text-destructive">{" * "}</span>
                             </FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <Input placeholder="E.g., Two Sum Algorithm Challenge" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -105,7 +108,12 @@ function CreateProblemForm({ ...props }) {
                                 <span className="text-destructive">{" * "}</span>
                             </FormLabel>
                             <FormControl>
-                                <Textarea {...field} rows={6} />
+                                <Textarea
+                                    placeholder="Describe your problem in detail. Include examples, constraints, and expected outcomes."
+                                    className="min-h-[120px]"
+                                    {...field}
+                                    rows={6}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
