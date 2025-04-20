@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 const initialFilters = {
     search: "",
@@ -61,7 +62,11 @@ export default function HomePage() {
 
     const renderedProblems = useMemo(() => {
         return problems.map((problem) => (
-            <div key={problem._id} className="border rounded-xl p-4 shadow-sm bg-white dark:bg-gray-900">
+            <Link
+                href={`/problems/${problem._id}`}
+                key={problem._id}
+                className="block border rounded-xl p-4 py-2 shadow-sm bg-background hover:bg-secondary/80 transition-colors"
+            >
                 <h3 className="text-xl font-semibold">{problem.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2 line-clamp-1">{problem.description}</p>
                 <div className="flex items-center gap-2 text-sm flex-wrap justify-between">
@@ -85,7 +90,7 @@ export default function HomePage() {
                         {problem.difficulty}
                     </div>
                 </div>
-            </div>
+            </Link>
         ));
     }, [problems]);
 
