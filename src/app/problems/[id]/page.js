@@ -5,10 +5,10 @@ import { useParams } from "next/navigation";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { Button } from "@/components/ui/button";
-import { Moon } from "lucide-react";
-import { Sun } from "lucide-react";
+import { Moon, Sun, Loader } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function ProblemPage() {
     const [mode, setMode] = useState("light");
@@ -20,23 +20,39 @@ export default function ProblemPage() {
 
     useEffect(() => {
         const fetchProblem = async () => {
-            const res = await axios.get(`/api/problems/${id}`);
-            setProblem(res.data);
+            try {
+                const res = await axios.get(`/api/problems/${id}`);
+                setProblem(res.data);
+            } catch (error) {
+                console.error("GET /api/problems/:id error:", error);
+                toast.error("Failed to fetch problem");
+            }
         };
         fetchProblem();
     }, [id]);
 
     const runCode = async () => {
-        const res = await fetch("/api/evaluate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ code, input: JSON.parse(input || "[]") }),
-        });
-        const data = await res.json();
-        setOutput(data.result ?? data.error);
+        try {
+            const res = await axios.post("/api/evaluate", {
+                code,
+                input: JSON.parse(input || "[]"),
+            });
+            setOutput(res.data.result ?? res.data.error);
+        } catch (error) {
+            console.log("POST /api/evaluate error:", error);
+            toast.error("Failed to run code", { style: { color: "hsl(var(--destructive))" } });
+        }
     };
 
-    if (!problem) return <div>Loading...</div>;
+    // Show loader until problem is fetched
+    if (!problem) {
+        return (
+            <div className="flex justify-center items-center min-h-96">
+                <Loader className="animate-spin size-8" />
+                <span className="sr-only">Loading...</span>
+            </div>
+        );
+    }
 
     return (
         <div className="flex flex-col md:flex-row p-4 gap-4">
@@ -44,7 +60,7 @@ export default function ProblemPage() {
             <div className="md:w-1/2 space-y-4">
                 <h2 className="text-xl font-bold">{problem.title}</h2>
                 <p className="text-gray-700 whitespace-pre-wrap">{problem.description}</p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     <span className="text-sm bg-gray-200 px-2 py-1 rounded">{problem.difficulty}</span>
                     {problem.tags.map((tag, idx) => (
                         <span key={idx} className="text-sm bg-blue-100 px-2 py-1 rounded">
@@ -55,7 +71,7 @@ export default function ProblemPage() {
             </div>
 
             {/* RIGHT PANEL */}
-            <div className="md:w-1/2 space-y-2 ">
+            <div className="md:w-1/2 space-y-3">
                 <div className="flex justify-between items-center bg-secondary px-2 py-1 rounded-md">
                     <h2 className="text-xl font-bold">Code</h2>
                     <button
@@ -80,9 +96,9 @@ export default function ProblemPage() {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
-                <button onClick={runCode} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                <Button className="w-full bg-green-600 hover:bg-green-700" onClick={runCode}>
                     Run
-                </button>
+                </Button>
                 <div className="mt-2 p-2 bg-gray-100 rounded text-sm whitespace-pre-wrap">
                     <strong>Output:</strong>
                     <pre>{output}</pre>
