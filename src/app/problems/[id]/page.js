@@ -37,7 +37,7 @@ export default function ProblemPage() {
         try {
             const res = await axios.post("/api/evaluate", {
                 code,
-                input: JSON.parse(input || "[]"),
+                input: input,
             });
             setOutput(res.data.output ?? res.data.error);
         } catch (error) {
@@ -103,7 +103,7 @@ export default function ProblemPage() {
                 </Button>
                 <div className="mt-2 p-2 bg-secondary mb-32 rounded text-sm whitespace-pre-wrap">
                     <strong>Output:</strong>
-                    <pre>{output}</pre>
+                    <pre>{`${output}`}</pre>
                 </div>
             </div>
         </div>
