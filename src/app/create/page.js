@@ -19,6 +19,8 @@ import { Loader } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
 
 const formSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -28,7 +30,6 @@ const formSchema = z.object({
 });
 
 function CreateProblemForm({ ...props }) {
-    const [error, setError] = useState(null);
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -53,7 +54,18 @@ function CreateProblemForm({ ...props }) {
             difficulty: values.difficulty,
             tags: tagsArray,
         };
-        console.log(payload);
+        try {
+            const response = await axios.post("/api/problems", payload);
+            if (response.status === 201) {
+                form.reset();
+                toast.success("Problem created successfully", { style: { color: "green" } });
+            } else {
+                toast.error("Failed to create problem", { style: { color: "hsl(var(--destructive))" } });
+            }
+        } catch (error) {
+            console.error("POST /api/problems error:", error);
+            toast.error("Failed to create problem", { style: { color: "hsl(var(--destructive))" } });
+        }
     };
     return (
         <Form {...form}>
@@ -66,8 +78,6 @@ function CreateProblemForm({ ...props }) {
                 {...props}
             >
                 <h2 className="text-2xl font-semibold">Submit a Problem</h2>
-                {error && <p className="text-sm text-destructive">{error}</p>}
-
                 <FormField
                     control={form.control}
                     name="title"

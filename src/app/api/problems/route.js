@@ -17,6 +17,10 @@ export async function GET() {
     }
 }
 
+/**
+ * @POST /api/problems
+ * @body { title, description, difficulty, tags }
+*/
 export async function POST(req) {
     try {
         await connectToDatabase();
