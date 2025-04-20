@@ -94,7 +94,7 @@ export default function ProblemPage() {
                     className="overflow-hidden rounded-md border focus-within:border-primary"
                 />
                 <Textarea
-                    placeholder="Input (e.g., [1, 2, 3])"
+                    placeholder="Input"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
