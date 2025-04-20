@@ -15,7 +15,7 @@ export default function ProblemPage() {
     const { id } = useParams();
     const [problem, setProblem] = useState(null);
     const [code, setCode] = useState(
-        `function solution() { return input * 12; }\n\n\n\n //do not change the function name\noutput = solution();`
+        `//write your code here \nfunction solution() { return input * 12; }\n\n\n\n //do not change the function below \noutput = solution(input);`
     );
     const [input, setInput] = useState("");
     const [output, setOutput] = useState("");
@@ -93,11 +93,7 @@ export default function ProblemPage() {
                     onChange={(val) => setCode(val)}
                     className="overflow-hidden rounded-md border focus-within:border-primary"
                 />
-                <Textarea
-                    placeholder="Input"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                />
+                <Textarea placeholder="Input" value={input} onChange={(e) => setInput(e.target.value)} />
                 <Button className="w-full bg-green-600 hover:bg-green-700" onClick={runCode}>
                     Run
                 </Button>

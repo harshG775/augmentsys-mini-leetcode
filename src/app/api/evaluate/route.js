@@ -10,7 +10,6 @@ export async function POST(req) {
         const { code, input } = await req.json();
         // code evaluation logic goes here
         const { output, error } = executeCode(code, input);
-
         return NextResponse.json({ output, error });
     } catch (err) {
         console.error("POST /api/evaluate error:", err);
@@ -20,8 +19,7 @@ export async function POST(req) {
 import vm from "vm";
 function executeCode(code, input) {
     if (typeof code !== "string" || code.trim() === "" || typeof input === "undefined") {
-        res.status(400).json({ error: "Invalid or missing code or input" });
-        return;
+        return NextResponse.json({ error: "Invalid or missing code or input" });
     }
 
     const context = { input, output: undefined };
