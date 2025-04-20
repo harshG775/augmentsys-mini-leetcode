@@ -37,7 +37,7 @@ export default function ProblemPage() {
                 code,
                 input: JSON.parse(input || "[]"),
             });
-            setOutput(res.data.result ?? res.data.error);
+            setOutput(res.data.output ?? res.data.error);
         } catch (error) {
             console.log("POST /api/evaluate error:", error);
             toast.error("Failed to run code", { style: { color: "hsl(var(--destructive))" } });
