@@ -14,7 +14,9 @@ export default function ProblemPage() {
     const [mode, setMode] = useState("light");
     const { id } = useParams();
     const [problem, setProblem] = useState(null);
-    const [code, setCode] = useState(`function solution() {\n  // your code\n}`);
+    const [code, setCode] = useState(
+        `function solution() { return input * 12; }\n\n\n\n //do not change the function name\noutput = solution();`
+    );
     const [input, setInput] = useState("");
     const [output, setOutput] = useState("");
 
@@ -99,7 +101,7 @@ export default function ProblemPage() {
                 <Button className="w-full bg-green-600 hover:bg-green-700" onClick={runCode}>
                     Run
                 </Button>
-                <div className="mt-2 p-2 bg-gray-100 rounded text-sm whitespace-pre-wrap">
+                <div className="mt-2 p-2 bg-secondary mb-32 rounded text-sm whitespace-pre-wrap">
                     <strong>Output:</strong>
                     <pre>{output}</pre>
                 </div>
