@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import connectToDatabase, { db } from "@/db";
 
-export async function GET() {
+/**
+ * @GET /api/problems
+ * @query { search, tag, difficulty }
+ * @returns { title, description, difficulty, tags }
+ * @example GET /api/problems?search=abc&tag=abc&difficulty=easy
+ */
+export async function GET(req) {
     try {
         await connectToDatabase();
         const { search, tag, difficulty } = Object.fromEntries(req.nextUrl.searchParams.entries());
@@ -9,7 +15,7 @@ export async function GET() {
         if (search) filter.title = { $regex: search, $options: "i" };
         if (tag) filter.tags = tag;
         if (difficulty) filter.difficulty = difficulty;
-        const problems = await Problem.find(filter).sort({ createdAt: -1 });
+        const problems = await db.Problem.find(filter).sort({ createdAt: -1 });
         return new Response(JSON.stringify(problems), { status: 200 });
     } catch (err) {
         console.error("GET /api/problems error:", err);
@@ -20,7 +26,9 @@ export async function GET() {
 /**
  * @POST /api/problems
  * @body { title, description, difficulty, tags }
-*/
+ * @returns { title, description, difficulty, tags }
+ * @example POST /api/problems
+ */
 export async function POST(req) {
     try {
         await connectToDatabase();
